@@ -100,7 +100,7 @@ Backend hosting
 
 ## Getting Started
 
-Optional commands to run locally:
+commands to run locally:
 
 ```bash
 # install deps
