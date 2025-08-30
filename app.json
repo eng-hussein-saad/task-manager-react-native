@@ -37,6 +37,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "Backend_Url": "https://task-manager-backend-production-8586.up.railway.app/api/"
     }
   }
 }

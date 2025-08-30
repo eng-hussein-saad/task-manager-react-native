@@ -55,7 +55,7 @@ export default function AnimatedAddTaskForm({ onAddTask }: AnimatedAddTaskFormPr
     onAddTask(title, description);
     setTitle('');
     setDescription('');
-    console.log('Task form submitted:', { title, description });
+    // console.log('Task form submitted:', { title, description });
   };
 
   const animatedContainerStyle = useAnimatedStyle(() => ({

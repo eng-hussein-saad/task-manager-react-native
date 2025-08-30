@@ -80,13 +80,13 @@ export default function EditTaskForm({
 
     if (!trimmedTitle) {
       setShowError(true);
-      console.log('Edit task validation failed: empty title');
+      // console.log('Edit task validation failed: empty title');
       return;
     }
 
     if (task) {
       onSave(task.id, trimmedTitle, trimmedDescription);
-      console.log('Task edited:', { id: task.id, title: trimmedTitle, description: trimmedDescription });
+      // console.log('Task edited:', { id: task.id, title: trimmedTitle, description: trimmedDescription });
     }
   };
 

@@ -20,7 +20,7 @@ export const useToast = () => {
       type,
       visible: true,
     });
-    console.log('Toast shown:', { message, type });
+    // console.log('Toast shown:', { message, type });
   }, []);
 
   const hideToast = useCallback(() => {
@@ -28,7 +28,7 @@ export const useToast = () => {
       ...prev,
       visible: false,
     }));
-    console.log('Toast hidden');
+    // console.log('Toast hidden');
   }, []);
 
   return {

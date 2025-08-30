@@ -1,8 +1,17 @@
+/** Home screen: tasks list, filters, CRUD actions and pull-to-refresh. */
+import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import AnimatedAddTaskForm from "../components/AnimatedAddTaskForm";
 import AnimatedTaskItem from "../components/AnimatedTaskItem";
+import Button from "../components/Button";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import EditTaskForm from "../components/EditTaskForm";
 import EmptyState from "../components/EmptyState";
@@ -13,6 +22,7 @@ import { useTasks } from "../hooks/useTasks";
 import { useToast } from "../hooks/useToasts";
 import { colors, commonStyles } from "../styles/commonStyles";
 import { Task } from "../types/Task";
+import { deleteToken, getToken } from "../utils/storage";
 
 export default function TaskManagerApp() {
   const {
@@ -25,9 +35,38 @@ export default function TaskManagerApp() {
     updateTask,
     deleteTask,
     taskStats,
+    loadRemoteTasks,
   } = useTasks();
 
   const { toast, showToast, hideToast } = useToast();
+  const [refreshing, setRefreshing] = useState(false);
+  // On mount, if authenticated, fetch remote tasks once and replace list
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const token = await getToken();
+        if (!token || cancelled) return;
+        await loadRemoteTasks();
+      } catch {
+        // ignore
+      }
+    };
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [loadRemoteTasks]);
+
+  const handleLogout = async () => {
+    try {
+      await deleteToken();
+      showToast("Logged out", "info");
+      router.replace("/login" as any);
+    } catch {
+      router.replace("/login" as any);
+    }
+  };
 
   // State for confirmation dialog
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -44,9 +83,14 @@ export default function TaskManagerApp() {
     showToast("Task added successfully!", "success");
   };
 
-  const handleToggleTask = (taskId: string) => {
+  const handleToggleTask = async (taskId: string) => {
     const task = allTasks.find((t: Task) => t.id === taskId);
-    toggleTask(taskId);
+    try {
+      await toggleTask(taskId);
+    } catch {
+      showToast("Failed to update task", "error");
+      return;
+    }
 
     if (task) {
       if (task.completed) {
@@ -107,6 +151,15 @@ export default function TaskManagerApp() {
     setTaskToEdit(null);
   };
 
+  const onRefresh = async () => {
+    try {
+      setRefreshing(true);
+      await loadRemoteTasks();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const getTaskToDeleteName = () => {
     if (taskToDelete) {
       const task = allTasks.find((t: Task) => t.id === taskToDelete);
@@ -115,9 +168,9 @@ export default function TaskManagerApp() {
     return "this task";
   };
 
-  console.log("Current tasks:", tasks.length);
-  console.log("Current filter:", filter);
-  console.log("Task stats:", taskStats);
+  // console.log("Current tasks:", tasks.length);
+  // console.log("Current filter:", filter);
+  // console.log("Task stats:", taskStats);
 
   return (
     <SafeAreaView style={commonStyles.wrapper}>
@@ -153,9 +206,20 @@ export default function TaskManagerApp() {
           style={commonStyles.content}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1 }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         >
           <View style={commonStyles.section}>
             <Text style={commonStyles.title}>Task Manager</Text>
+            <View style={{ marginBottom: 12 }}>
+              <Button
+                text="Logout"
+                variant="outline"
+                onPress={handleLogout}
+                style={{ alignSelf: "flex-end", width: 120, marginTop: 0 }}
+              />
+            </View>
 
             {taskStats.total > 0 && <TaskStats taskStats={taskStats} />}
 
