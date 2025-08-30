@@ -11,6 +11,19 @@ Cross‑platform task manager built with Expo Router and React Native. Features 
 - Error logging: Global handlers for web/native with optional remote forwarding
 - Expo Router: File‑based navigation and safe area handling
 
+## App Preview
+
+<p align="center">
+   <img alt="Screenshot 1" src="assets/images/1.jpg" width="260" />
+   <img alt="Screenshot 2" src="assets/images/2.jpg" width="260" />
+   <img alt="Screenshot 3" src="assets/images/3.jpg" width="260" />
+</p>
+<p align="center">
+   <img alt="Screenshot 4" src="assets/images/4.jpg" width="260" />
+   <img alt="Screenshot 5" src="assets/images/5.jpg" width="260" />
+   <img alt="Screenshot 6" src="assets/images/6.jpg" width="260" />
+</p>
+
 ## Tech Stack
 
 - Expo ~53 • Expo Router ~5
@@ -69,25 +82,11 @@ RemoteTaskItem shape:
 
 ## Configuration
 
-Set your backend base URL in Expo config extras (preferred) or via environment:
-
-app.json excerpt:
-
-```
-{
-   "expo": {
-      "extra": {
-         "Backend_Url": "https://your-api.example.com/"
-      }
-   }
-}
-```
-
-Or create a .env file at the project root with:
+````create a .env file at the project root with:
 
 ```dotenv
 Backend_Url="https://task-manager-backend-production-8586.up.railway.app/api/"
-```
+````
 
 Notes
 
@@ -113,12 +112,7 @@ npm run start
 # press a: Android • i: iOS • w: Web
 ```
 
-Scripts
 
-- start: expo start
-- android/ios/web: platform shortcuts
-- lint: run Expo lint
-- reset-project: reset starter scaffolding
 
 ## Behavior & UX Notes
 
@@ -132,4 +126,3 @@ Scripts
 - 401/403 after login: Verify Backend_Url and that the Authorization: Bearer token is accepted by your backend.
 - Expo Secure Store on web: Uses an in‑memory fallback; prefer native devices or simulators for secure storage behavior.
 - Metro cache issues: If you see stale code, clear cache and restart Metro.
-
