@@ -40,7 +40,7 @@ styles/commonStyles.ts# Theme and shared styles
 types/Task.ts        # Task type and filter enum
 ```
 
-## Backend API Assumptions
+## Backend API
 
 The app expects a REST backend with these endpoints (JSON):
 
