@@ -133,6 +133,3 @@ Scripts
 - Expo Secure Store on web: Uses an in‑memory fallback; prefer native devices or simulators for secure storage behavior.
 - Metro cache issues: If you see stale code, clear cache and restart Metro.
 
-## License
-
-This project currently does not include a license file. Add one if you plan to distribute.
